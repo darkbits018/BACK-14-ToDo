@@ -4,7 +4,7 @@
 **Instructions**
 - clone the repository
 - open current directory in terminal
-- Install Requirments 
+- Install Requirments (pip install click)
 
 **To make the taskmaster.bat command available globally, you need to add its directory to your system’s PATH.**
 - Right-click on 'This PC' or 'Computer' on your desktop or in File Explorer.
