@@ -11,6 +11,11 @@
 - Click 'Properties'.
 - Click 'Advanced system settings'.
 - Click 'Environment Variables'.
+
+
+- _**or you can just search Environment Variables**_
+
+
 - In the 'System variables' section, find the Path variable and click 'Edit'.
 - Click 'New' and add the path to the directory where taskmaster.bat is located. For example, C:\Users\YourName\Scripts.
 - Click 'OK' to close all dialog boxes.
