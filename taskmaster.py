@@ -1,8 +1,10 @@
 import click
 import json
+from colorama import Fore, Style, init
 from datetime import datetime
 
 TASK_FILE = 'db.json'
+init(autoreset=True)
 
 
 def load_tasks():
@@ -66,7 +68,13 @@ def list():
         click.echo("No tasks Found")
     else:
         for task in tasks:
-            click.echo(f"{task['id']}: {task['title']} - {task['description']}  - {task['status']}")
+            status_color = Fore.GREEN if task["status"] == "completed" else Fore.RED
+            click.echo(f'{Fore.YELLOW}ID: {task["id"]} | '
+                       f'{Fore.BLUE}Title: {task["title"]} | '
+                       f'{Fore.CYAN}Description: {task["description"]} | '
+                       # f'{Fore.YELLOW}Due Date: {task["due_date"]} | '
+                       f'{status_color}Status: {task["status"]}'
+                       )
             # - {task['due_date']}
 
 
