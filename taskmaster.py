@@ -150,7 +150,7 @@ def main():
                 status_arg = args[1].lower()
                 if status_arg == "done":
                     list_tasks("done")
-                elif status_arg == "not done":
+                elif status_arg == "not_done":
                     list_tasks("todo")
                 elif status_arg == "in_progress":
                     list_tasks("in progress")
