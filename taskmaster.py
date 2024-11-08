@@ -45,18 +45,62 @@ def delete_task(task_id):
         save_tasks(updated_tasks)
         print(f"Task {task_id} deleted")
 
+
 def mark_task(task_id, status):
+    # Ensure the provided status is valid
     if status not in {"todo", "in progress", "done"}:
-        print("status must be 'todo', 'in progress', or 'done'")
+        print("Status must be 'todo', 'in progress', or 'done'")
         return
-    tasks = load_task()
+
+    tasks = load_task()  # Load the existing tasks from JSON
+    task_found = False  # Flag to check if task with given ID was found
+
     for task in tasks:
-        if task["id"] == task_id:
-            task["status"] == status
-            save_tasks(tasks)
-            print(f"Task {task_id} marked as {status}")
-            return
-    print(f"No task found with ID {task_id}")
+        if task["id"] == task_id:  # Locate the task by ID
+            task["status"] = status  # Update the status
+            task_found = True
+            break  # Exit loop after finding the task
+
+    if task_found:
+        save_tasks(tasks)  # Save the updated tasks list back to the JSON file
+        print(f"Task {task_id} marked as {status}.")
+    else:
+        print(f"No task found with ID {task_id}")
+
+
+def list_tasks(status=None):
+    tasks = load_task()
+
+    if status:
+        tasks = [task for task in tasks if task["status"] == status]
+    if not tasks:
+        print("No tasks found")
+        return
+    print(f"{'ID':<5} {'Description':<30} {'status':<15}")
+    print("-" * 50)
+
+    for task in tasks:
+        print(
+            f"{task.get('id', 'N/A'):<5} {task.get('description', 'No description'):<30} {task.get('status', 'No status'):<15}")
+
+def print_help():
+    print("\nTask Tracker CLI - Command Reference")
+    print("-" * 40)
+    print("add <description>                : Add a new task with the given description.")
+    print("update <id> <new description>    : Update the description of a task with the given ID.")
+    print("delete <id>                      : Delete the task with the given ID.")
+    print("mark <id> <status>               : Update the status of a task with the given ID to 'todo', 'in progress', "
+          "or 'done'.")
+    print("list                             : List all tasks.")
+    print("list done                        : List all tasks that are done.")
+    print("list not done                    : List all tasks that are not done.")
+    print("list in progress                 : List all tasks that are in progress.")
+    print("help                             : Show this help message.")
+    print("\nExample Usage:")
+    print("  python taskmaster.py add \"Buy groceries\"")
+    print("  python taskmaster.py update 1 \"Buy groceries and cook dinner\"")
+    print("  python taskmaster.py mark 1 done\n")
+
 
 
 def main():
@@ -64,7 +108,10 @@ def main():
     if args:
         command = args[0]
 
-        if command == "add":
+        if command == "help":
+            print_help()
+
+        elif command == "add":
             if len(args) > 1:
                 add_task(" ".join(args[1:]))
             else:
@@ -80,7 +127,7 @@ def main():
             else:
                 print("Please provide both task ID and a new description")
         elif command == "delete":
-            if len(args)>1:
+            if len(args) > 1:
                 try:
                     task_id = int(args[1])
                     delete_task(task_id)
@@ -98,6 +145,19 @@ def main():
                     print("Task ID must be an integer.")
             else:
                 print("Please provide both a task ID and a status (todo, in progress, done).")
+        elif command == "list":
+            if len(args) > 1:
+                status_arg = args[1].lower()
+                if status_arg == "done":
+                    list_tasks("done")
+                elif status_arg == "not done":
+                    list_tasks("todo")
+                elif status_arg == "in_progress":
+                    list_tasks("in progress")
+                else:
+                    print("Unknown status. Use 'done', 'not done', or 'in progress'.")
+            else:
+                list_tasks()  # List all tasks if no status is specified
         else:
             print("Unknown command")
     else:
